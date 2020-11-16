@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block customcss %}
+<link rel='stylesheet' type='text/css' href="{% static 'delete.css' %}">
+{% endblock customcss %}
+
+{% block content %}
+
+<form action='' method='POST' enctype='multipart/form-data' id="contact" autocomplete="off">{% csrf_token %}
+    <div class="container">
+        <div class="head">
+            <h2>ToDoリストを削除</h2>
+        </div>
+        「{{ object }}」<br/>
+        を削除しますか？<br/>
+
+        <button id="submit" type="submit" class="ok-button">はい</button>
+        <button id="submit" type="submit" name='cancel' class="cancel-button">いいえ</button>
+    </div>
+</form>
+
+{% endblock content %}

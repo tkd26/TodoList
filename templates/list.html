@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block customcss %}
+<link rel='stylesheet' type='text/css' href="{% static 'list.css' %}">
+{% endblock customcss %}
+
+{% block header %}
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Todoリスト</h1>
+        <p class="lead">Todoリストを作って毎日を効率的に過ごしましょう．</p>
+    </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+<!-- <div class='container'>
+    <a href="{% url 'create' %}" class="btn btn-info" tabindex="-1" role="button" aria-disabled="true">新規作成</a>
+    {% for item in object_list %}
+        <div class="alert alert-{{ item.priority }}" role="alert">
+            <p>{{ item.title }}　期日:{{ item.duedate }}</p>
+            <a href="{% url 'update' item.pk %}" class="btn btn-info" tabindex="-1" role="button" aria-disabled="true">編集</a>
+            <a href="{% url 'delete' item.pk %}" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">削除</a>
+            <a href="{% url 'detail' item.pk %}" class="btn btn-success" tabindex="-1" role="button" aria-disabled="true">詳細</a>
+        </div>
+    {% endfor %}
+</div> -->
+
+<nav class="accordion arrows">
+    <header class="box">
+        <label for="acc-close" class="box-title">
+            <a class='title'>Todo メニュー</a>
+
+            <div class="sort-menu">
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    並び替え
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="{% url 'list' 'duedate' %}", name='sort_duedate'>期限順</a>
+                    <a class="dropdown-item" href="{% url 'list' 'title' %}", ame='sort_name'>名前順</a>
+                    <a class="dropdown-item" href="{% url 'list' 'priority' %}", ame='sort_name'>重要度順</a>
+                    </div>
+                </div>
+            </div>
+            <a href="{% url 'create' %}" tabindex="-1" role="button" aria-disabled="true" class='add'>
+                <svg width="64px" height="64px" viewBox="-8 -8 32 32" class="bi bi-plus-circle" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+            </a>
+        </label>
+    </header>
+    {% for item in object_list %}
+    <input type="radio" name="accordion" id="cb{{ item.pk }}" />
+    <section class="box">
+        <label class="box-title" for="cb{{ item.pk }}">
+            <a class="title">{{ item.title }}</a>
+            <a class="duedate">{{ item.duedate }}</a>
+            <a class="priority-icon-{{ item.priority }}">
+                <svg width="50px" height="50px" viewBox="0 0 17 16" class="bi bi-exclamation-triangle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M7.938 2.016a.146.146 0 0 0-.054.057L1.027 13.74a.176.176 0 0 0-.002.183c.016.03.037.05.054.06.015.01.034.017.066.017h13.713a.12.12 0 0 0 .066-.017.163.163 0 0 0 .055-.06.176.176 0 0 0-.003-.183L8.12 2.073a.146.146 0 0 0-.054-.057A.13.13 0 0 0 8.002 2a.13.13 0 0 0-.064.016zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                    <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                </svg>
+            </a>
+        </label>
+        <label class="box-close" for="acc-close"></label>
+        <div class="box-content">
+            <p>{{ item.memo }}</p>
+            <p class='box-content-icon'>
+                <a href="{% url 'update' item.pk %}" class="btn btn-outline-primary">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+                    </svg>
+                </a>
+                <a href="{% url 'delete' item.pk %}" class="btn btn-outline-primary">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                    </svg>
+                </a>
+            </p>
+        </div>
+    </section>
+    {% endfor %}
+    <input type="radio" name="accordion" id="acc-close" />
+    
+</nav>
+
+{% endblock content %}
+
+
